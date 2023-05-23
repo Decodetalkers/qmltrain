@@ -14,6 +14,8 @@ qt_add_executable(appmarine
     src/main.cpp
     src/Commandline.h
     src/Commandline.cpp
+    src/StyleSettings.h
+    src/StyleSettings.cpp
 )
 
 # Not Format Me

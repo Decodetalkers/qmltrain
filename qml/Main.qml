@@ -4,13 +4,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Command.Base 1.0
 
-
 ApplicationWindow {
     id: root
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
+
+    required property var buildInStyles
 
     Action {
         id: navigateAboutAction
@@ -19,6 +20,7 @@ ApplicationWindow {
             optionsMenu.open()
         }
     }
+
     header: ToolBar {
         RowLayout {
             spacing: 20
@@ -38,6 +40,12 @@ ApplicationWindow {
                         text: "Settings"
                         onTriggered : {
                             CommandLineGet.getOutput()
+                        }
+                    }
+                    Action {
+                        text: "Style"
+                        onTriggered : {
+                            settingsDialog.open()
                         }
                     }
                 }
@@ -63,6 +71,53 @@ ApplicationWindow {
             Layout.preferredWidth: root.width - 200
             Layout.preferredHeight: root.height
             wrapMode: TextEdit.Wrap
+        }
+    }
+
+
+    Dialog {
+        id: settingsDialog
+        x: Math.round((root.width - width) / 2)
+        y: Math.round(root.height / 6)
+        width: Math.round(Math.min(root.width, root.height) / 3 * 2)
+        modal: true
+        focus: true
+        title: "Settings"
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            StyleSettings.setStyle(styleBox.currentText)
+            settingsDialog.close()
+        }
+        onRejected: {
+            settingsDialog.close()
+        }
+        contentItem: ColumnLayout {
+            id: settingColumn
+            spacing: 20
+
+            RowLayout {
+                spacing: 10
+
+                Label {
+                    text: "Style: "
+                }
+                ComboBox {
+                    id: styleBox
+                    property int styleIndex : -1
+                    model: root.buildInStyles
+                    Component.onCompleted: {
+                        styleIndex = find(StyleSettings.style, Qt.MatchFixedString)
+                        if (styleIndex !== -1) {
+                            currentIndex = styleIndex
+                        }
+                    }
+                    Layout.fillWidth: true
+                }
+            }
+            Text {
+                text: StyleSettings.style
+            }
         }
     }
 }
