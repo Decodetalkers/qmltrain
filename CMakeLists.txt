@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 6.2 COMPONENTS Quick Widgets QuickControls2 Network REQUIRED)
+find_package(Qt6 COMPONENTS Quick Widgets QuickControls2 Network REQUIRED)
 
 
 qt_add_executable(appmarine
