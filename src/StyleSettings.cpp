@@ -2,7 +2,6 @@
 
 #include <QDebug>
 #include <QQuickStyle>
-#include <variant>
 
 StyleSettings::StyleSettings(QObject *parent)
   : QObject(parent)
