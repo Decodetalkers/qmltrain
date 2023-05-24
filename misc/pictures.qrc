@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC>
+    <qresource prefix="/">
+        <file>images/qt-logo.png</file>
+        <file>images/arrow.png</file>
+        <file>images/drawer.png</file>
+        <file>images/back.png</file>
+        <file>images/arrows.png</file>
+    </qresource>
+</RCC>

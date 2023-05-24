@@ -50,7 +50,7 @@ main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QQuickStyle::setStyle(settings.value("style").toString());
-    const QUrl url(u"qrc:/marine/qml/Main.qml"_qs);
+    const QUrl url(u"qrc:/Marine/qml/Main.qml"_qs);
     QObject::connect(
       &engine,
       &QQmlApplicationEngine::objectCreated,
