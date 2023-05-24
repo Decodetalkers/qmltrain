@@ -18,6 +18,9 @@ qt_add_executable(appmarine
     src/StyleSettings.h
     src/StyleSettings.cpp
     src/Interface.h
+    src/Interface.cpp
+    src/SubScribesModel.h
+    src/SubScribesModel.cpp
     misc/pictures.qrc
 )
 

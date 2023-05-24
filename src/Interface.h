@@ -1,11 +1,18 @@
 #pragma once
 #include <QDebug>
+#include <QJsonObject>
 #include <QPair>
 #include <QString>
 #include <format>
 #include <variant>
 
-namespace Interfaces {
+template<typename T>
+concept JsonAble = requires(T a)
+{
+    {
+        a.toJson()
+    } -> std::convertible_to<QJsonObject>;
+};
 template<class... Ts>
 struct overloaded : Ts...
 {
@@ -16,14 +23,18 @@ struct overloaded : Ts...
 template<class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
 
+
+namespace Interfaces {
+
 struct SSMessage
 {
     QString scheme;
-    QPair<QString, QString> secret;
+    QPair<QString, QString> method;
     QString username;
     int port;
     QString password;
     QString hint;
+    QJsonObject toJson() const;
 };
 
 struct VmessMessage
@@ -39,6 +50,7 @@ struct VmessMessage
     QString path;
     QString tls;
     QString sni;
+    QJsonObject toJson() const;
 };
 
 using UrlMessage = std::variant<SSMessage, VmessMessage>;
@@ -48,8 +60,8 @@ operator<<(QDebug d, const SSMessage &message)
 {
     d << "sheme :" << message.scheme << ","
       << std::format("Secret use : {}, and content: {}",
-                     message.secret.first.toStdString(),
-                     message.secret.second.toStdString())
+                     message.method.first.toStdString(),
+                     message.method.second.toStdString())
       << ","
       << "username:" << message.username << ","
       << "port" << message.port << ","

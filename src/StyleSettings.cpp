@@ -1,5 +1,4 @@
 #include "StyleSettings.h"
-
 #include <QDebug>
 #include <QQuickStyle>
 

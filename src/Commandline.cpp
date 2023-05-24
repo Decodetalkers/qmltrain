@@ -37,7 +37,7 @@ decodeUrl(QString urlorigin) -> UrlMessage
     QStringList keys = userName.split(':');
 
     return SSMessage{.scheme   = url.scheme(),
-                     .secret   = {keys[0], keys[1]},
+                     .method   = {keys[0], keys[1]},
                      .username = url.userName(),
                      .port     = url.port(),
                      .password = url.password(),
