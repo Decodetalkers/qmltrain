@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QObject>
 
 class CommandLineGet final : public QObject
 {
@@ -17,6 +17,7 @@ signals:
 public slots:
     void getOutput();
     void getHttpsOutput(QString);
+
 private:
     QNetworkAccessManager *m_networkAcessManager;
 };
