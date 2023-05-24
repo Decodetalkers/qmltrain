@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 #include <QProcess>
 #include <QRegularExpression>
+#include <format>
 #include <variant>
 
 template<class... Ts>
@@ -22,7 +23,7 @@ overloaded(Ts...) -> overloaded<Ts...>;
 struct SSMessage
 {
     QString scheme;
-    QString hostname;
+    QPair<QString, QString> secret;
     QString username;
     int port;
     QString password;
@@ -67,9 +68,12 @@ decodeUrl(QString urlorigin) -> UrlMessage
           .sni  = document["sni"].toString(),
         };
     }
-    QUrl url = urlorigin;
+    QUrl url         = urlorigin;
+    QString userName = QByteArray::fromBase64(url.userName().toLocal8Bit());
+    QStringList keys = userName.split(':');
+
     return SSMessage{.scheme   = url.scheme(),
-                     .hostname = url.host(),
+                     .secret   = {keys[0], keys[1]},
                      .username = url.userName(),
                      .port     = url.port(),
                      .password = url.password(),
@@ -80,7 +84,10 @@ QDebug
 operator<<(QDebug d, const SSMessage &message)
 {
     d << "sheme :" << message.scheme << ","
-      << "hostname:" << message.hostname << ","
+      << std::format("Secret use : {}, and content: {}",
+                     message.secret.first.toStdString(),
+                     message.secret.second.toStdString())
+      << ","
       << "username:" << message.username << ","
       << "port" << message.port << ","
       << "password" << message.password << ","
