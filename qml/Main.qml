@@ -20,11 +20,20 @@ ApplicationWindow {
             optionsMenu.open()
         }
     }
-
+    Action {
+        id: navigateBackAction
+        icon.name: "vlc"
+        onTriggered: {
+            drawer.open()
+        }
+    }
     header: ToolBar {
         RowLayout {
             spacing: 20
             anchors.fill: parent
+            ToolButton {
+                action: navigateBackAction
+            }
             Label {
                 id: titleLabel
                 text: "Nobody here"
@@ -53,12 +62,36 @@ ApplicationWindow {
             }
         }
     }
+
     Connections {
         function onOutPuts(messages) {
             edit.text = messages
         }
         target: CommandLineGet
     }
+
+    Drawer {
+        id: drawer
+        width: Math.min(root.width, root.height) / 3 * 2
+        height: root.width
+        ListView {
+            id: drawerListView
+
+            focus: true
+            currentIndex: -1
+            anchors.fill: parent
+            delegate: ItemDelegate {
+                width: drawerListView.width
+                text: model.title
+                highlighted: ListView.isCurrentItem
+            }
+            model: ListModel {
+                ListElement { title: "abc" }
+                ListElement { title: "def" }
+            }
+        }
+    }
+
     RowLayout {
         ListView {
             implicitWidth: 200; implicitHeight: root.height
@@ -74,7 +107,6 @@ ApplicationWindow {
             wrapMode: TextEdit.Wrap
         }
     }
-
 
     Dialog {
         id: settingsDialog
@@ -121,6 +153,7 @@ ApplicationWindow {
             }
         }
     }
+
     Dialog {
         id: resDialog
         x: Math.round((root.width - width) / 2)
@@ -143,5 +176,4 @@ ApplicationWindow {
             id: urlText
         }
     }
-
 }
