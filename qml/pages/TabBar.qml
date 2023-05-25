@@ -36,13 +36,13 @@ Page {
                     }
 
                     Button {
-                        text: "Add scribe"
+                        text: "Add subScribe"
                         onClicked: {
                             StyleSettings.addSubscribe("test")
                         }
                     }
                     Button {
-                        text: "remove scribe"
+                        text: "remove subScribe"
                         onClicked: {
                             StyleSettings.removeSubScribe()
                         }
@@ -58,7 +58,7 @@ Page {
         Repeater {
             model: StyleSettings.subscribes
             TabButton {
-                text: "First"
+                text: modelData
             }
         }
     }

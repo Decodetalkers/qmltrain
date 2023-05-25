@@ -1,8 +1,16 @@
 #include "SubScribesModel.h"
 
-SubScribesModel::SubScribesModel(QObject *parent)
+SubScribesModel::SubScribesModel(QString url,
+                                 QVector<Interfaces::UrlMessage> subscribes,
+                                 QObject *parent)
   : QAbstractListModel(parent)
+  , m_url(url)
+  , m_subscribes(subscribes)
+  , m_subscribeCommand(new CommandLineGet(this))
 {
+    connect(m_subscribeCommand, &CommandLineGet::suribesUpdate, this, [this](auto subscribes) {
+        m_subscribes = subscribes;
+    });
 }
 
 int
@@ -14,6 +22,9 @@ SubScribesModel::rowCount(const QModelIndex &) const
 QVariant
 SubScribesModel::data(const QModelIndex &index, int role) const
 {
+    if (role == Url) {
+        return m_url;
+    }
     if (index.row() < rowCount()) {
         return get_property(static_cast<SubScribeRole>(role), index.row());
     }
@@ -24,13 +35,14 @@ QHash<int, QByteArray>
 SubScribesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles{
-      {Name, "Name"}, {Password, "Password"}, {Port, "Port"}, {Method, "Method"}};
+      {Name, "name"}, {Password, "password"}, {Port, "port"}, {Method, "method"}, {Url, "url"}};
     return roles;
 }
 
 void
-SubScribesModel::init()
+SubScribesModel::updateSucribes()
 {
+    m_subscribeCommand->getHttpsOutput(m_url);
 }
 
 QString
@@ -46,6 +58,8 @@ SubScribesModel::get_property(SubScribesModel::SubScribeRole role, int index) co
                                          return QString::number(message.port);
                                      case Method:
                                          return message.method.first;
+                                     [[unlikely]] default:
+                                         break;
                                      }
                                      return message.username;
                                  },
@@ -59,6 +73,8 @@ SubScribesModel::get_property(SubScribesModel::SubScribeRole role, int index) co
                                          return QString::number(message.port);
                                      case Method:
                                          return message.type;
+                                     [[unlikely]] default:
+                                         break;
                                      }
                                      return QString();
                                  },

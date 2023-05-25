@@ -68,12 +68,12 @@ ApplicationWindow {
         }
     }
 
-    Connections {
-        function onOutPuts(messages) {
-            edit.text = messages
-        }
-        target: CommandLineGet
-    }
+    //Connections {
+    //    function onOutPuts(messages) {
+    //        edit.text = messages
+    //    }
+    //    target: CommandLineGet
+    //}
 
     Drawer {
         id: drawer
@@ -215,7 +215,7 @@ ApplicationWindow {
 
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
-            CommandLineGet.getHttpsOutput(urlText.text)
+            //CommandLineGet.getHttpsOutput(urlText.text)
             //StyleSettings.setStyle(styleBox.currentText)
             resDialog.close()
         }

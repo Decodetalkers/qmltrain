@@ -6,6 +6,20 @@
 #include <format>
 #include <variant>
 
+namespace rng = std::ranges;
+
+template<typename C>
+struct to_helper
+{};
+
+// This actually does the work
+template<typename Container, rng::range R>
+requires std::convertible_to<rng::range_value_t<R>, typename Container::value_type> Container
+operator|(R &&r, to_helper<Container>)
+{
+    return Container{r.begin(), r.end()};
+}
+
 template<typename T>
 concept JsonAble = requires(T a)
 {
@@ -22,7 +36,6 @@ struct overloaded : Ts...
 // in cpp 20, noneeded again
 template<class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
-
 
 namespace Interfaces {
 

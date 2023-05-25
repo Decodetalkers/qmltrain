@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Interface.h"
+
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QObject>
@@ -13,7 +15,7 @@ public:
 
 signals:
     void outPuts(QString);
-
+    void suribesUpdate(QVector<Interfaces::UrlMessage>);
 public slots:
     void getOutput();
     void getHttpsOutput(QString);

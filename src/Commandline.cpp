@@ -9,6 +9,8 @@
 #include <QProcess>
 #include <QRegularExpression>
 
+#include <ranges>
+
 using namespace Interfaces;
 
 [[nodiscard]] static inline auto
@@ -56,10 +58,10 @@ CommandLineGet::CommandLineGet(QObject *parent)
           }
 
           QString answer0 = QByteArray::fromBase64(reply->readAll());
-          auto result     = answer0.split(QRegularExpression("[\r\n]"), Qt::SkipEmptyParts);
-          for (auto res : result) {
-              qDebug() << decodeUrl(res);
-          }
+          auto result     = answer0.split(QRegularExpression("[\r\n]"), Qt::SkipEmptyParts) |
+                        std::views::transform([](auto &p) { return decodeUrl(p); }) |
+                        to_helper<QVector<UrlMessage>>();
+          Q_EMIT suribesUpdate(result);
       });
 }
 
