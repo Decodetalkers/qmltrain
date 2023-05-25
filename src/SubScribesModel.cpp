@@ -1,6 +1,4 @@
 #include "SubScribesModel.h"
-#include <functional>
-#include <qhash.h>
 
 SubScribesModel::SubScribesModel(QObject *parent)
   : QAbstractListModel(parent)

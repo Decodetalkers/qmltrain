@@ -11,6 +11,7 @@ class StyleSettings final : public QObject
 public:
     explicit StyleSettings(QObject *parent = nullptr);
     inline QString style() const { return m_style; };
+
 public slots:
     void setStyle(QString style);
 
