@@ -17,6 +17,7 @@ public:
 public slots:
     void setStyle(QString style);
     void removeSubScribe();
+    void removeSubScribeWithKey(QString subscribe);
     void addSubscribe(QString subscribe);
 
 signals:

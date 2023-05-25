@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-
+import QtQuick.Layouts
 import Command.Base 1.0
 
 Page {
@@ -58,7 +58,19 @@ Page {
         Repeater {
             model: StyleSettings.subscribes
             TabButton {
-                text: modelData
+                contentItem: RowLayout {
+                    Label {
+                        text: modelData
+                        horizontalAlignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
+                    }
+                    Button {
+                        text: "x"
+                        onClicked : {
+                            StyleSettings.removeSubScribeWithKey(modelData)
+                        }
+                    }
+                }
             }
         }
     }

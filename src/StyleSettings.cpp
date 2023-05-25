@@ -37,3 +37,8 @@ void StyleSettings::removeSubScribe()
     m_subscribes.pop_back();
     Q_EMIT subscribesChanged();
 }
+void StyleSettings::removeSubScribeWithKey(QString subscribe)
+{
+    m_subscribes.removeOne(subscribe);
+    Q_EMIT subscribesChanged();
+}
