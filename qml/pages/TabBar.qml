@@ -35,17 +35,15 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    Button {
-                        text: "Add subScribe"
-                        onClicked: {
-                            StyleSettings.addSubscribe("test")
-                        }
-                    }
-                    Button {
-                        text: "remove subScribe"
-                        onClicked: {
-                            StyleSettings.removeSubScribe()
-                        }
+                }
+                RoundButton {
+                    text: qsTr("o")
+                    highlighted: true
+                    anchors.margins: 10
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    onClicked: {
+                        modelData.updateSucribes()
                     }
                 }
             }
@@ -60,25 +58,50 @@ Page {
             TabButton {
                 contentItem: RowLayout {
                     Label {
-                        text: modelData
+                        text: modelData.url
                         horizontalAlignment: Qt.AlignHCenter
                         Layout.fillWidth: true
                     }
                     Button {
                         text: "x"
                         onClicked : {
-                            StyleSettings.removeSubScribeWithKey(modelData)
+                            StyleSettings.removeSubScribeWithKey(modelData.url)
                         }
                     }
                 }
             }
         }
     }
+
     RoundButton {
         text: qsTr("+")
         highlighted: true
         anchors.margins: 10
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        onClicked: {
+            resDialog.open()
+        }
+    }
+
+    Dialog {
+        id: resDialog
+        x: Math.round((page.width - width) / 2)
+        y: Math.round(page.height / 6)
+        width: Math.round(Math.min(page.width, page.height) / 3 * 2)
+        modal: true
+        focus: true
+        title: "Settings"
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            StyleSettings.addSubscribe(urlText.text)
+            //CommandLineGet.getHttpsOutput(urlText.text)
+            //StyleSettings.setStyle(styleBox.currentText)
+            resDialog.close()
+        }
+        contentItem: TextInput {
+            id: urlText
+        }
     }
 }

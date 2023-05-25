@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Interface.h"
 #include "Commandline.h"
+#include "Interface.h"
 
 #include <QAbstractListModel>
 
@@ -9,6 +9,7 @@ class SubScribesModel final : public QAbstractListModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString url READ url NOTIFY urlChanged)
 public:
     enum SubScribeRole
     {
@@ -29,11 +30,15 @@ public:
 
     Q_INVOKABLE void updateSucribes();
 
+    QString url() { return m_url; };
+
+signals:
+    void urlChanged();
 private:
     QString get_property(SubScribeRole role, int index) const;
 
 private:
     QString m_url;
     QVector<Interfaces::UrlMessage> m_subscribes;
-    CommandLineGet* m_subscribeCommand;
+    CommandLineGet *m_subscribeCommand;
 };

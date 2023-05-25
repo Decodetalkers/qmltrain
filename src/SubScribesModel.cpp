@@ -9,6 +9,7 @@ SubScribesModel::SubScribesModel(QString url,
   , m_subscribeCommand(new CommandLineGet(this))
 {
     connect(m_subscribeCommand, &CommandLineGet::suribesUpdate, this, [this](auto subscribes) {
+        qDebug() << subscribes;
         m_subscribes = subscribes;
     });
 }

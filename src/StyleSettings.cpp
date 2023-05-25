@@ -9,7 +9,7 @@ StyleSettings::StyleSettings(QObject *parent)
       auto settings = m_settings.value(QLatin1String("style")).toString();
       return settings;
   }))
-  , m_subscribes({"a", "b", "c", "e"})
+  , m_subscribes({})
 {
 }
 
@@ -25,20 +25,23 @@ StyleSettings::setStyle(QString style)
 void
 StyleSettings::addSubscribe(QString subscribe)
 {
-    m_subscribes.append(subscribe);
+    m_subscribes.append(new SubScribesModel(subscribe, {}, this));
     Q_EMIT subscribesChanged();
 }
 
-void StyleSettings::removeSubScribe()
+void
+StyleSettings::removeSubScribeWithKey(QString subscribe)
 {
-    if (m_subscribes.length() == 1) {
-        return;
+    int index     = 0;
+    bool hasmatch = false;
+    for (; index < m_subscribes.length(); ++index) {
+        if (subscribe == m_subscribes[index]->url()) {
+            hasmatch = true;
+            break;
+        }
     }
-    m_subscribes.pop_back();
-    Q_EMIT subscribesChanged();
-}
-void StyleSettings::removeSubScribeWithKey(QString subscribe)
-{
-    m_subscribes.removeOne(subscribe);
+    if (hasmatch) {
+        m_subscribes.removeAt(index);
+    }
     Q_EMIT subscribesChanged();
 }

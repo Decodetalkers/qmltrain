@@ -1,5 +1,6 @@
 #include "Commandline.h"
 #include "StyleSettings.h"
+#include "src/SubScribesModel.h"
 
 #include <QApplication>
 #include <QGuiApplication>
@@ -7,6 +8,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QSettings>
+#include <qqml.h>
 
 inline auto
 buildStyles() -> const QStringList
@@ -29,6 +31,7 @@ registerGlobalTypes()
       "Command.Base", 1, 0, "StyleSettings", [](QQmlEngine *, QJSEngine *) -> QObject * {
           return new StyleSettings;
       });
+    qmlRegisterType<SubScribesModel>("Command.Sync", 1, 0, "SubScribesModel");
 }
 
 int
