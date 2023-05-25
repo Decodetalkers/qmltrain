@@ -9,6 +9,7 @@ StyleSettings::StyleSettings(QObject *parent)
       auto settings = m_settings.value(QLatin1String("style")).toString();
       return settings;
   }))
+  , m_subscribes({"a", "b", "c", "e"})
 {
 }
 
@@ -19,4 +20,20 @@ StyleSettings::setStyle(QString style)
     m_style = style;
     Q_EMIT styleChanged();
     qDebug() << "Style is :" << style;
+}
+
+void
+StyleSettings::addSubscribe(QString subscribe)
+{
+    m_subscribes.append(subscribe);
+    Q_EMIT subscribesChanged();
+}
+
+void StyleSettings::removeSubScribe()
+{
+    if (m_subscribes.length() == 1) {
+        return;
+    }
+    m_subscribes.pop_back();
+    Q_EMIT subscribesChanged();
 }

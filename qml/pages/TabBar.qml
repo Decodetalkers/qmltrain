@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import Command.Base 1.0
+
 Page {
     id: page
 
@@ -10,7 +12,7 @@ Page {
         currentIndex: tabBar.currentIndex
 
         Repeater {
-            model: 3
+            model: StyleSettings.subscribes
 
             Pane {
                 width: swipeView.width
@@ -32,6 +34,19 @@ Page {
                         source: "qrc:/images/arrows.png"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
+
+                    Button {
+                        text: "Add scribe"
+                        onClicked: {
+                            StyleSettings.addSubscribe("test")
+                        }
+                    }
+                    Button {
+                        text: "remove scribe"
+                        onClicked: {
+                            StyleSettings.removeSubScribe()
+                        }
+                    }
                 }
             }
         }
@@ -40,15 +55,11 @@ Page {
     header: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
-
-        TabButton {
-            text: "First"
-        }
-        TabButton {
-            text: "Second"
-        }
-        TabButton {
-            text: "Third"
+        Repeater {
+            model: StyleSettings.subscribes
+            TabButton {
+                text: "First"
+            }
         }
     }
 }
