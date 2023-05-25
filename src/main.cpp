@@ -8,7 +8,6 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QSettings>
-#include <qqml.h>
 
 inline auto
 buildStyles() -> const QStringList

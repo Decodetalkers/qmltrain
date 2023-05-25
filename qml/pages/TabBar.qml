@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Command.Base 1.0
-
+import Command.Sync 1.0
+import Marine
 Page {
     id: page
 
@@ -18,29 +19,16 @@ Page {
                 width: swipeView.width
                 height: swipeView.height
 
-                Column {
-                    spacing: 40
-                    width: parent.width
-
-                    Label {
-                        width: parent.width
-                        wrapMode: Label.Wrap
-                        horizontalAlignment: Qt.AlignHCenter
-                        text: "TabBar is a bar with icons or text which allows the user "
-                              + "to switch between different subtasks, views, or modes."
+                ListView {
+                    delegate: SubScribeDelegate {
                     }
-
-                    Image {
-                        source: "qrc:/images/arrows.png"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
+                    model: modelData
                 }
                 RoundButton {
                     text: qsTr("o")
                     highlighted: true
                     anchors.margins: 10
-                    anchors.left: parent.left
+                    anchors.right: parent.right
                     anchors.top: parent.top
                     onClicked: {
                         modelData.updateSucribes()

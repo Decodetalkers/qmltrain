@@ -1,4 +1,5 @@
 #include "SubScribesModel.h"
+#include "src/Interface.h"
 
 SubScribesModel::SubScribesModel(QString url,
                                  QVector<Interfaces::UrlMessage> subscribes,
@@ -8,9 +9,18 @@ SubScribesModel::SubScribesModel(QString url,
   , m_subscribes(subscribes)
   , m_subscribeCommand(new CommandLineGet(this))
 {
+    m_subscribes.append(Interfaces::SSMessage{
+      .username = "beta",
+      .port     = 11,
+      .password = "123",
+      .hint     = "test",
+    });
     connect(m_subscribeCommand, &CommandLineGet::suribesUpdate, this, [this](auto subscribes) {
         qDebug() << subscribes;
+        beginResetModel();
+        m_subscribes.clear();
         m_subscribes = subscribes;
+        endResetModel();
     });
 }
 

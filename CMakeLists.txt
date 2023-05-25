@@ -34,6 +34,7 @@ qt_add_qml_module(appmarine
         ./qml/ScrollablePage.qml
         ./qml/pages/LinksPage.qml
         ./qml/pages/TabBar.qml
+        ./qml/pages/TabBar/SubScribeDelegate.qml
 )
 
 set_target_properties(appmarine PROPERTIES
