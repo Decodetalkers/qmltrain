@@ -74,4 +74,11 @@ Page {
             }
         }
     }
+    RoundButton {
+        text: qsTr("+")
+        highlighted: true
+        anchors.margins: 10
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
 }
