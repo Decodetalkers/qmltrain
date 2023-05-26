@@ -9,14 +9,8 @@ SubScribesModel::SubScribesModel(QString url,
   , m_subscribes(subscribes)
   , m_subscribeCommand(new CommandLineGet(this))
 {
-    m_subscribes.append(Interfaces::SSMessage{
-      .username = "beta",
-      .port     = 11,
-      .password = "123",
-      .hint     = "test",
-    });
     connect(m_subscribeCommand, &CommandLineGet::suribesUpdate, this, [this](auto subscribes) {
-        qDebug() << subscribes;
+        //qDebug() << subscribes;
         beginResetModel();
         m_subscribes.clear();
         m_subscribes = subscribes;
@@ -62,7 +56,8 @@ SubScribesModel::get_property(SubScribesModel::SubScribeRole role, int index) co
     return std::visit(overloaded{[role](Interfaces::SSMessage message) -> QString {
                                      switch (role) {
                                      case Name:
-                                         return message.username;
+                                         return QString::fromStdString(
+                                           std::format("{}-SS", message.hint.toStdString()));
                                      case Password:
                                          return message.password;
                                      case Port:
@@ -77,9 +72,10 @@ SubScribesModel::get_property(SubScribesModel::SubScribeRole role, int index) co
                                  [role](Interfaces::VmessMessage message) -> QString {
                                      switch (role) {
                                      case Name:
-                                         return message.id;
+                                         return QString::fromStdString(
+                                           std::format("{}-Vmess", message.ps.toStdString()));
                                      case Password:
-                                         return message.ps;
+                                         return message.id;
                                      case Port:
                                          return QString::number(message.port);
                                      case Method:

@@ -20,7 +20,9 @@ Page {
                 height: swipeView.height
 
                 ListView {
+                    anchors.fill: parent
                     delegate: SubScribeDelegate {
+                        width: swipeView.width
                     }
                     model: modelData
                 }
