@@ -2,10 +2,12 @@
 #include "src/Interface.h"
 
 SubScribesModel::SubScribesModel(QString url,
+                                 QString urlName,
                                  QVector<Interfaces::UrlMessage> subscribes,
                                  QObject *parent)
   : QAbstractListModel(parent)
   , m_url(url)
+  , m_urlName(urlName)
   , m_subscribes(subscribes)
   , m_subscribeCommand(new CommandLineGet(this))
 {

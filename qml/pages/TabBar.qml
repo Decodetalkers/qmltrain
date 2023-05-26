@@ -11,7 +11,9 @@ Page {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
-
+        onCurrentIndexChanged: {
+            tabBar.currentIndex = swipeView.currentIndex
+        }
         Repeater {
             model: StyleSettings.subscribes
 
@@ -50,9 +52,12 @@ Page {
         Repeater {
             model: StyleSettings.subscribes
             TabButton {
+                onClicked : {
+                    swipeView.currentIndex = tabBar.currentIndex
+                }
                 contentItem: RowLayout {
                     Label {
-                        text: modelData.url
+                        text: modelData.urlName
                         horizontalAlignment: Qt.AlignHCenter
                         Layout.fillWidth: true
                     }
@@ -89,13 +94,43 @@ Page {
 
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
-            StyleSettings.addSubscribe(urlText.text)
+            StyleSettings.addSubscribe(urlTextField.text, urlNameField.text)
             //CommandLineGet.getHttpsOutput(urlText.text)
             //StyleSettings.setStyle(styleBox.currentText)
+            grid.urlNameField.clear()
+            grid.urlTextField.clear()
             resDialog.close()
+
         }
-        contentItem: TextInput {
-            id: urlText
+        contentItem: GridLayout {
+            id: grid
+            property alias urlNameField: urlNameField
+            property alias urlTextField: urlTextField
+            property string urlName
+            property string url
+            rows: 2
+            columns: 2
+            Label {
+                text: qsTr("UrlName")
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
+            }
+            TextField {
+                id: urlNameField
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
+                placeholderText: grid.urlName
+
+            }
+            Label {
+                text: qsTr("Url")
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
+            }
+            TextField {
+                id: urlTextField
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
+                placeholderText: grid.url
+            }
         }
     }
 }

@@ -23,9 +23,9 @@ StyleSettings::setStyle(QString style)
 }
 
 void
-StyleSettings::addSubscribe(QString subscribe)
+StyleSettings::addSubscribe(QString subscribe, QString subscribeAlias)
 {
-    m_subscribes.append(new SubScribesModel(subscribe, {}, this));
+    m_subscribes.append(new SubScribesModel(subscribe, subscribeAlias, {}, this));
     Q_EMIT subscribesChanged();
 }
 

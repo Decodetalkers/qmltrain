@@ -17,7 +17,7 @@ public:
 public slots:
     void setStyle(QString style);
     void removeSubScribeWithKey(QString subscribe);
-    void addSubscribe(QString subscribe);
+    void addSubscribe(QString subscribe, QString subscribeAlias);
 
 signals:
     void styleChanged();
