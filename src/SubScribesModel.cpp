@@ -10,12 +10,22 @@ SubScribesModel::SubScribesModel(QString url,
   , m_subscribeCommand(new CommandLineGet(this))
 {
     connect(m_subscribeCommand, &CommandLineGet::suribesUpdate, this, [this](auto subscribes) {
-        //qDebug() << subscribes;
         beginResetModel();
         m_subscribes.clear();
         m_subscribes = subscribes;
         endResetModel();
     });
+    connect(m_subscribeCommand, &CommandLineGet::startGetHttps, this, [this] {
+        m_subscribing = true;
+        Q_EMIT subscribingStatusChanged();
+    });
+    connect(m_subscribeCommand,
+            &CommandLineGet::endGetHttpsStatus,
+            this,
+            [this](CommandLineGet::GetHttpStatus) {
+                m_subscribing = false;
+                Q_EMIT subscribingStatusChanged();
+            });
 }
 
 int

@@ -10,6 +10,7 @@ class SubScribesModel final : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
+    Q_PROPERTY(bool subscribing READ subscribing NOTIFY subscribingStatusChanged)
 public:
     enum SubScribeRole
     {
@@ -31,9 +32,12 @@ public:
     Q_INVOKABLE void updateSucribes();
 
     QString url() { return m_url; };
+    bool subscribing() { return m_subscribing; };
 
 signals:
     void urlChanged();
+    void subscribingStatusChanged();
+
 private:
     QString get_property(SubScribeRole role, int index) const;
 
@@ -41,4 +45,5 @@ private:
     QString m_url;
     QVector<Interfaces::UrlMessage> m_subscribes;
     CommandLineGet *m_subscribeCommand;
+    bool m_subscribing = false;
 };

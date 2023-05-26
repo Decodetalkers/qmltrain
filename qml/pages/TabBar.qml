@@ -18,7 +18,10 @@ Page {
             Pane {
                 width: swipeView.width
                 height: swipeView.height
-
+                BusyIndicator {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: modelData.subscribing
+                }
                 ListView {
                     anchors.fill: parent
                     delegate: SubScribeDelegate {
@@ -35,6 +38,7 @@ Page {
                     onClicked: {
                         modelData.updateSucribes()
                     }
+                    enabled: !modelData.subscribing
                 }
             }
         }

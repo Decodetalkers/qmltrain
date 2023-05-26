@@ -54,6 +54,7 @@ CommandLineGet::CommandLineGet(QObject *parent)
       m_networkAcessManager, &QNetworkAccessManager::finished, this, [this](QNetworkReply *reply) {
           if (reply->error()) {
               qDebug() << reply->errorString();
+              Q_EMIT endGetHttpsStatus(Failed);
               return;
           }
 
@@ -62,6 +63,7 @@ CommandLineGet::CommandLineGet(QObject *parent)
                         std::views::transform([](auto &p) { return decodeUrl(p); }) |
                         to_helper<QVector<UrlMessage>>();
           Q_EMIT suribesUpdate(result);
+          Q_EMIT endGetHttpsStatus(Successed);
       });
 }
 
@@ -81,6 +83,7 @@ CommandLineGet::getOutput()
 void
 CommandLineGet::getHttpsOutput(QString url)
 {
+    Q_EMIT startGetHttps();
     QNetworkRequest request;
     request.setUrl(url);
     m_networkAcessManager->get(request);

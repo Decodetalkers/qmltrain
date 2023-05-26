@@ -13,9 +13,19 @@ class CommandLineGet final : public QObject
 public:
     explicit CommandLineGet(QObject *parent = nullptr);
 
+    enum GetHttpStatus
+    {
+        Successed,
+        Failed,
+    };
+    Q_ENUM(GetHttpStatus)
+
 signals:
     void outPuts(QString);
     void suribesUpdate(QVector<Interfaces::UrlMessage>);
+    void startGetHttps();
+    void endGetHttpsStatus(GetHttpStatus);
+
 public slots:
     void getOutput();
     void getHttpsOutput(QString);
