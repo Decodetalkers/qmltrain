@@ -14,6 +14,7 @@ public:
     explicit StyleSettings(QObject *parent = nullptr);
     inline QString style() const { return m_style; };
     inline QVector<SubScribesModel *> subscribes() const { return m_subscribes; }
+
 public slots:
     void setStyle(QString style);
     void removeSubScribeWithKey(QString subscribe);
@@ -22,6 +23,9 @@ public slots:
 signals:
     void styleChanged();
     void subscribesChanged();
+
+private:
+    void saveSubScribingConfig();
 
 private:
     QSettings m_settings;

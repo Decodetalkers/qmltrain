@@ -1,6 +1,21 @@
 #include "StyleSettings.h"
 #include <QDebug>
+#include <QFile>
 #include <QQuickStyle>
+#include <QStandardPaths>
+#include <format>
+#include <QApplication>
+#include <QJsonArray>
+#include <QJsonDocument>
+
+static QString
+get_config_path()
+{
+    return QString::fromStdString(
+      std::format("{}/{}/subscribes.json",
+                  QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).toStdString(),
+                  qApp->organizationName().toStdString()));
+}
 
 StyleSettings::StyleSettings(QObject *parent)
   : QObject(parent)
@@ -9,8 +24,62 @@ StyleSettings::StyleSettings(QObject *parent)
       auto settings = m_settings.value(QLatin1String("style")).toString();
       return settings;
   }))
-  , m_subscribes({})
+  , m_subscribes(std::visit([this]() -> QVector<SubScribesModel *> {
+      QFile file(get_config_path());
+      if (!file.exists() && !file.isReadable()) {
+          return {};
+      }
+      file.open(QIODevice::ReadOnly | QIODevice::Text);
+      auto bytes                        = file.readAll();
+      QJsonDocument document            = QJsonDocument::fromJson(bytes);
+      QJsonArray array                  = document.array();
+      QVector<SubScribesModel *> models = {};
+      for (auto object : array) {
+          QVector<Interfaces::UrlMessage> messages;
+          auto topObject  = object.toObject();
+          auto subscribes = topObject["subscribes"].toArray();
+          for (auto sub : subscribes) {
+              auto object = sub.toObject();
+              if (object["interfaceName"].toString() == "SS") {
+                  messages.append(Interfaces::SSMessage{
+                    .scheme   = object["scheme"].toString(),
+                    .method   = std::invoke([object]() -> QPair<QString, QString> {
+                        QJsonObject secret = object["secret"].toObject();
+                        return {secret["method"].toString(), secret["secretContent"].toString()};
+                    }),
+                    .username = object["username"].toString(),
+                    .port     = object["port"].toInt(),
+
+                    .password = object["password"].toString(),
+                    .hint     = object["hint"].toString(),
+
+                  });
+              } else if (object["interfaceName"].toString() == "VMess") {
+                  messages.append(Interfaces::VmessMessage{
+                    .ps   = object["ps"].toString(),
+                    .add  = object["add"].toString(),
+                    .port = object["port"].toInt(),
+                    .id   = object["id"].toString(),
+                    .aid  = object["aid"].toInt(),
+                    .net  = object["net"].toString(),
+                    .type = object["type"].toString(),
+                    .host = object["host"].toString(),
+                    .path = object["path"].toString(),
+                    .tls  = object["tls"].toString(),
+                    .sni  = object["sni"].toString(),
+                  });
+              }
+          }
+          models.append(new SubScribesModel(
+            topObject["url"].toString(), topObject["urlName"].toString(), messages, this));
+      }
+      return models;
+  }))
 {
+    for (auto subs : m_subscribes) {
+        connect(
+          subs, &SubScribesModel::subscribinfosUpdate, this, &StyleSettings::saveSubScribingConfig);
+    }
 }
 
 void
@@ -25,7 +94,11 @@ StyleSettings::setStyle(QString style)
 void
 StyleSettings::addSubscribe(QString subscribe, QString subscribeAlias)
 {
-    m_subscribes.append(new SubScribesModel(subscribe, subscribeAlias, {}, this));
+    auto subs = new SubScribesModel(subscribe, subscribeAlias, {}, this);
+    connect(
+      subs, &SubScribesModel::subscribinfosUpdate, this, &StyleSettings::saveSubScribingConfig);
+    m_subscribes.append(subs);
+    saveSubScribingConfig();
     Q_EMIT subscribesChanged();
 }
 
@@ -42,6 +115,28 @@ StyleSettings::removeSubScribeWithKey(QString subscribe)
     }
     if (hasmatch) {
         m_subscribes.removeAt(index);
+        saveSubScribingConfig();
     }
     Q_EMIT subscribesChanged();
+}
+
+void
+StyleSettings::saveSubScribingConfig()
+{
+    QJsonArray array;
+    for (auto subscrib : m_subscribes) {
+        array.append(subscrib->toJson());
+    }
+    QJsonDocument document;
+    document.setArray(array);
+    QByteArray bytes = document.toJson(QJsonDocument::Indented);
+    QFile file(get_config_path());
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        QTextStream iStream(&file);
+        iStream.setEncoding(QStringConverter::Encoding::Utf8);
+        iStream << bytes;
+        file.close();
+    } else {
+        qWarning() << "Cannot save config";
+    }
 }

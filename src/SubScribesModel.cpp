@@ -1,5 +1,6 @@
 #include "SubScribesModel.h"
 #include "src/Interface.h"
+#include <qjsonarray.h>
 
 SubScribesModel::SubScribesModel(QString url,
                                  QString urlName,
@@ -16,6 +17,7 @@ SubScribesModel::SubScribesModel(QString url,
         m_subscribes.clear();
         m_subscribes = subscribes;
         endResetModel();
+        Q_EMIT subscribinfosUpdate();
     });
     connect(m_subscribeCommand, &CommandLineGet::startGetHttps, this, [this] {
         m_subscribing = true;
@@ -99,4 +101,25 @@ SubScribesModel::get_property(SubScribesModel::SubScribeRole role, int index) co
                                  },
                                  [](auto) { return QString(); }},
                       this->m_subscribes[index]);
+}
+
+QJsonObject
+SubScribesModel::toJson()
+{
+    return {{"urlName", this->m_urlName},
+            {"url", this->m_url},
+            {"subscribes", std::invoke([this]() -> QJsonArray {
+                 auto array = QJsonArray();
+                 for (auto subscribe : m_subscribes) {
+                     array.append(
+                       std::visit(overloaded{[](Interfaces::SSMessage message) -> QJsonObject {
+                                                 return message.toJson();
+                                             },
+                                             [](Interfaces::VmessMessage message) -> QJsonObject {
+                                                 return message.toJson();
+                                             }},
+                                  subscribe));
+                 }
+                 return array;
+             })}};
 }

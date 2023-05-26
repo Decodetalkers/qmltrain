@@ -37,10 +37,13 @@ public:
     QString urlName() { return m_urlName; };
     bool subscribing() { return m_subscribing; };
 
+    QJsonObject toJson();
+
 signals:
     void urlChanged();
     void urlNameChanged();
     void subscribingStatusChanged();
+    void subscribinfosUpdate();
 
 private:
     QString get_property(SubScribeRole role, int index) const;
