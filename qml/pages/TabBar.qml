@@ -17,7 +17,20 @@ Page {
                 model: StyleSettings.subscribes
                 delegate: ItemDelegate {
                     width: swipeView.width
-                    text: modelData.urlName
+                    contentItem : RowLayout {
+                        Label {
+                            text: modelData.urlName
+                            horizontalAlignment: Qt.AlignLeft
+                            Layout.fillWidth: true
+                        }
+                        Button {
+                            text: "o"
+                            onClicked : {
+                                modelData.updateSucribes()
+                            }
+                            enabled: !modelData.subscribing
+                        }
+                    }
                 }
             }
         }
@@ -71,11 +84,12 @@ Page {
                     Button {
                         text: "x"
                         onClicked : {
-                            StyleSettings.removeSubScribeWithKey(modelData.url)
+                            rmdialog.removeUrl(modelData.url, modelData.urlName)
                         }
                     }
                 }
             }
+
         }
     }
 
@@ -89,7 +103,26 @@ Page {
             resDialog.open()
         }
     }
-
+    Dialog {
+        id: rmdialog
+        property string currentUrl;
+        property string currentUrlName;
+        x: Math.round((page.width - width) / 2)
+        y: Math.round(page.height / 6)
+        width: Math.round(Math.min(page.width, page.height) / 3 * 2)
+        modal: true
+        focus: true
+        title: "Remove " + rmdialog.currentUrlName + "?"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        function removeUrl(url, urlName) {
+            rmdialog.currentUrl = url
+            rmdialog.currentUrlName = urlName
+            rmdialog.open()
+        }
+        onAccepted : {
+            StyleSettings.removeSubScribeWithKey(rmdialog.currentUrl)
+        }
+    }
     Dialog {
         id: resDialog
         x: Math.round((page.width - width) / 2)
