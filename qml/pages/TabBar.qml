@@ -11,8 +11,15 @@ Page {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
-        onCurrentIndexChanged: {
-            tabBar.currentIndex = swipeView.currentIndex
+        Pane {
+            ListView {
+                anchors.fill: parent
+                model: StyleSettings.subscribes
+                delegate: ItemDelegate {
+                    width: swipeView.width
+                    text: modelData.urlName
+                }
+            }
         }
         Repeater {
             model: StyleSettings.subscribes
@@ -49,12 +56,12 @@ Page {
     header: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
+        TabButton {
+            text: "OverView"
+        }
         Repeater {
             model: StyleSettings.subscribes
             TabButton {
-                onClicked : {
-                    swipeView.currentIndex = tabBar.currentIndex
-                }
                 contentItem: RowLayout {
                     Label {
                         text: modelData.urlName
