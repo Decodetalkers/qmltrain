@@ -59,13 +59,19 @@ Page {
                     anchors.fill: parent
                     delegate: SubScribeDelegate {
                         width: swipeView.width
+                        onSwitchCheck: function(checked) {
+                            console.log(checked)
+                            console.log(modelData.url)
+                            console.log(index)
+                        }
                     }
                     model: modelData
                 }
                 RoundButton {
                     text: qsTr("o")
                     highlighted: true
-                    anchors.margins: 10
+                    anchors.rightMargin: 70
+                    anchors.topMargin: 20
                     anchors.right: parent.right
                     anchors.top: parent.top
                     onClicked: {
@@ -107,7 +113,7 @@ Page {
     RoundButton {
         text: qsTr("+")
         highlighted: true
-        anchors.margins: 10
+        anchors.margins: 50
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         onClicked: {

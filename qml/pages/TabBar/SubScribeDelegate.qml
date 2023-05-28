@@ -8,16 +8,24 @@ import QtQuick.Controls
 ItemDelegate {
     id: delegate
 
+    signal switchCheck(bool checkstatus)
     checkable: true
 
     contentItem: ColumnLayout {
         spacing: 10
+        RowLayout {
+            Label {
+                text: name
+                font.bold: true
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+            }
 
-        Label {
-            text: name
-            font.bold: true
-            elide: Text.ElideRight
-            Layout.fillWidth: true
+            Switch {
+                onClicked : {
+                    delegate.switchCheck(checked)
+                }
+            }
         }
 
         GridLayout {
