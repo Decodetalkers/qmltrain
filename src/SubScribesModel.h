@@ -12,6 +12,7 @@ class SubScribesModel final : public QAbstractListModel
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)
     Q_PROPERTY(QString urlName READ urlName NOTIFY urlNameChanged)
     Q_PROPERTY(bool subscribing READ subscribing NOTIFY subscribingStatusChanged)
+    Q_PROPERTY(int subscribeCounts READ subscribeCounts NOTIFY subscribeCountsChanged)
 public:
     enum SubScribeRole
     {
@@ -36,6 +37,7 @@ public:
     QString url() { return m_url; };
     QString urlName() { return m_urlName; };
     bool subscribing() { return m_subscribing; };
+    int subscribeCounts() { return m_subscribes.length(); };
 
     QJsonObject toJson();
 
@@ -44,6 +46,7 @@ signals:
     void urlNameChanged();
     void subscribingStatusChanged();
     void subscribinfosUpdate();
+    void subscribeCountsChanged();
 
 private:
     QString get_property(SubScribeRole role, int index) const;

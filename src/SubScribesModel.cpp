@@ -17,6 +17,7 @@ SubScribesModel::SubScribesModel(QString url,
         m_subscribes.clear();
         m_subscribes = subscribes;
         endResetModel();
+        Q_EMIT subscribeCountsChanged();
         Q_EMIT subscribinfosUpdate();
     });
     connect(m_subscribeCommand, &CommandLineGet::startGetHttps, this, [this] {

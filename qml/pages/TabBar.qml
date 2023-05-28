@@ -23,6 +23,11 @@ Page {
                             horizontalAlignment: Qt.AlignLeft
                             Layout.fillWidth: true
                         }
+                        Label {
+                            text: "Subscribe Counts :" + modelData.subscribeCounts
+                            horizontalAlignment: Qt.AlignRight
+                            Layout.fillWidth: false
+                        }
                         Button {
                             text: "o"
                             onClicked : {
