@@ -109,4 +109,7 @@ operator<<(QDebug d, const UrlMessage &message)
     return d;
 }
 
+[[nodiscard]] UrlMessage
+get_urlmessage_from_json(QJsonObject object);
+
 }

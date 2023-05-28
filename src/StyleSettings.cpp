@@ -1,12 +1,12 @@
 #include "StyleSettings.h"
 #include <QApplication>
+#include <QClipboard>
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QQuickStyle>
 #include <QStandardPaths>
-#include <QClipboard>
 #include <format>
 
 static QString
@@ -50,35 +50,7 @@ StyleSettings::StyleSettings(QObject *parent)
           auto subscribes = topObject["subscribes"].toArray();
           for (auto sub : subscribes) {
               auto object = sub.toObject();
-              if (object["interfaceName"].toString() == "SS") {
-                  messages.append(Interfaces::SSMessage{
-                    .scheme   = object["scheme"].toString(),
-                    .method   = std::invoke([object]() -> QPair<QString, QString> {
-                        QJsonObject secret = object["secret"].toObject();
-                        return {secret["method"].toString(), secret["secretContent"].toString()};
-                    }),
-                    .username = object["username"].toString(),
-                    .port     = object["port"].toInt(),
-
-                    .password = object["password"].toString(),
-                    .hint     = object["hint"].toString(),
-
-                  });
-              } else if (object["interfaceName"].toString() == "VMess") {
-                  messages.append(Interfaces::VmessMessage{
-                    .ps   = object["ps"].toString(),
-                    .add  = object["add"].toString(),
-                    .port = object["port"].toInt(),
-                    .id   = object["id"].toString(),
-                    .aid  = object["aid"].toInt(),
-                    .net  = object["net"].toString(),
-                    .type = object["type"].toString(),
-                    .host = object["host"].toString(),
-                    .path = object["path"].toString(),
-                    .tls  = object["tls"].toString(),
-                    .sni  = object["sni"].toString(),
-                  });
-              }
+              messages.append(Interfaces::get_urlmessage_from_json(object));
           }
           models.append(new SubScribesModel(topObject["url"].toString(),
                                             topObject["urlName"].toString(),
