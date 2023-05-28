@@ -1,14 +1,16 @@
 #include "SubScribesModel.h"
 #include "src/Interface.h"
-#include <qjsonarray.h>
+#include <QJsonArray>
 
 SubScribesModel::SubScribesModel(QString url,
                                  QString urlName,
+                                 QString updateTime,
                                  QVector<Interfaces::UrlMessage> subscribes,
                                  QObject *parent)
   : QAbstractListModel(parent)
   , m_url(url)
   , m_urlName(urlName)
+  , m_updateTime(updateTime)
   , m_subscribes(subscribes)
   , m_subscribeCommand(new CommandLineGet(this))
 {
@@ -17,6 +19,8 @@ SubScribesModel::SubScribesModel(QString url,
         m_subscribes.clear();
         m_subscribes = subscribes;
         endResetModel();
+        m_updateTime = QDateTime::currentDateTime().toString("dd.MM.yyyy");
+        Q_EMIT updateTimeChanged();
         Q_EMIT subscribeCountsChanged();
         Q_EMIT subscribinfosUpdate();
     });
@@ -109,6 +113,7 @@ SubScribesModel::toJson()
 {
     return {{"urlName", this->m_urlName},
             {"url", this->m_url},
+            {"updateTime", this->m_updateTime},
             {"subscribes", std::invoke([this]() -> QJsonArray {
                  auto array = QJsonArray();
                  for (auto subscribe : m_subscribes) {

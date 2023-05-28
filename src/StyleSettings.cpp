@@ -1,12 +1,12 @@
 #include "StyleSettings.h"
+#include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <format>
-#include <QApplication>
-#include <QJsonArray>
-#include <QJsonDocument>
 
 static QString
 get_config_path()
@@ -70,8 +70,11 @@ StyleSettings::StyleSettings(QObject *parent)
                   });
               }
           }
-          models.append(new SubScribesModel(
-            topObject["url"].toString(), topObject["urlName"].toString(), messages, this));
+          models.append(new SubScribesModel(topObject["url"].toString(),
+                                            topObject["urlName"].toString(),
+                                            topObject["updateTime"].toString(),
+                                            messages,
+                                            this));
       }
       return models;
   }))
@@ -94,7 +97,8 @@ StyleSettings::setStyle(QString style)
 void
 StyleSettings::addSubscribe(QString subscribe, QString subscribeAlias)
 {
-    auto subs = new SubScribesModel(subscribe, subscribeAlias, {}, this);
+    auto subs = new SubScribesModel(
+      subscribe, subscribeAlias, QDateTime::currentDateTime().toString("dd.MM.yyyy"), {}, this);
     connect(
       subs, &SubScribesModel::subscribinfosUpdate, this, &StyleSettings::saveSubScribingConfig);
     m_subscribes.append(subs);

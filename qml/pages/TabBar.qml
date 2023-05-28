@@ -18,10 +18,16 @@ Page {
                 delegate: ItemDelegate {
                     width: swipeView.width
                     contentItem : RowLayout {
+                        spacing: 20
                         Label {
                             text: modelData.urlName
                             horizontalAlignment: Qt.AlignLeft
                             Layout.fillWidth: true
+                        }
+                        Label {
+                            text: "Last Update : " + modelData.updateTime
+                            horizontalAlignment: Qt.AlignRight
+                            Layout.fillWidth: false
                         }
                         Label {
                             text: "Subscribe Counts :" + modelData.subscribeCounts
