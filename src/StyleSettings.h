@@ -23,7 +23,7 @@ public slots:
     void setStyle(QString style);
     void removeSubScribeWithKey(QString subscribe);
     void addSubscribe(QString subscribe, QString subscribeAlias);
-    void setWorkingSubScribe(QString url, int index);
+    void setWorkingSubScribe(QString url, int index, bool toset);
 
 signals:
     void styleChanged();

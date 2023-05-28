@@ -148,10 +148,14 @@ StyleSettings::saveSubScribingConfig()
 }
 
 void
-StyleSettings::setWorkingSubScribe(QString url, int index)
+StyleSettings::setWorkingSubScribe(QString url, int index, bool toset)
 {
-    m_workingSubScribeIndex = index;
-    m_workingSubScribeUrl = url;
+    if (!toset) {
+        m_workingSubScribeIndex = -1;
+    } else {
+        m_workingSubScribeIndex = index;
+        m_workingSubScribeUrl = url;
+    }
     Q_EMIT workingSubScribeUrlChanged();
     Q_EMIT workingSubScribeIndexChanged();
 }

@@ -79,7 +79,7 @@ Page {
                         width: swipeView.width
                         theswitch.checked: modelData.url === StyleSettings.workingSubScribeUrl && index === StyleSettings.workingSubScribeIndex
                         onSwitchCheck: function(checked) {
-                            StyleSettings.setWorkingSubScribe(modelData.url, index);
+                            StyleSettings.setWorkingSubScribe(modelData.url, index, checked);
                         }
                     }
 
@@ -215,7 +215,7 @@ Page {
 
                 contentItem: RowLayout {
                     Label {
-                        color: StyleSettings.workingSubScribeUrl === modelData.url ? "orange" : "black"
+                        color: StyleSettings.workingSubScribeUrl === modelData.url && StyleSettings.workingSubScribeIndex !== -1 ? "orange" : "black"
                         text: modelData.urlName
                         horizontalAlignment: Qt.AlignHCenter
                         Layout.fillWidth: true
