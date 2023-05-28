@@ -59,10 +59,9 @@ Page {
                     anchors.fill: parent
                     delegate: SubScribeDelegate {
                         width: swipeView.width
+                        theswitch.checked: modelData.url === StyleSettings.workingSubScribeUrl && index === StyleSettings.workingSubScribeIndex
                         onSwitchCheck: function(checked) {
-                            console.log(checked)
-                            console.log(modelData.url)
-                            console.log(index)
+                            StyleSettings.setWorkingSubScribe(modelData.url, index)
                         }
                     }
                     model: modelData
@@ -94,6 +93,7 @@ Page {
             TabButton {
                 contentItem: RowLayout {
                     Label {
+                        color: StyleSettings.workingSubScribeUrl === modelData.url ? "orange" : "black"
                         text: modelData.urlName
                         horizontalAlignment: Qt.AlignHCenter
                         Layout.fillWidth: true

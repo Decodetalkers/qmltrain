@@ -78,6 +78,8 @@ StyleSettings::StyleSettings(QObject *parent)
       }
       return models;
   }))
+  , m_workingSubScribeIndex(-1)
+  , m_workingSubScribeUrl(QString())
 {
     for (auto subs : m_subscribes) {
         connect(
@@ -143,4 +145,13 @@ StyleSettings::saveSubScribingConfig()
     } else {
         qWarning() << "Cannot save config";
     }
+}
+
+void
+StyleSettings::setWorkingSubScribe(QString url, int index)
+{
+    m_workingSubScribeIndex = index;
+    m_workingSubScribeUrl = url;
+    Q_EMIT workingSubScribeUrlChanged();
+    Q_EMIT workingSubScribeIndexChanged();
 }

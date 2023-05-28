@@ -8,6 +8,7 @@ import QtQuick.Controls
 ItemDelegate {
     id: delegate
 
+    property alias theswitch: theswitch
     signal switchCheck(bool checkstatus)
     checkable: true
 
@@ -22,6 +23,7 @@ ItemDelegate {
             }
 
             Switch {
+                id: theswitch
                 onClicked : {
                     delegate.switchCheck(checked)
                 }
