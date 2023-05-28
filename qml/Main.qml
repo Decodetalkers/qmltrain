@@ -149,31 +149,6 @@ ApplicationWindow {
 
     }
 
-    Dialog {
-        id: resDialog
-
-        x: Math.round((root.width - width) / 2)
-        y: Math.round(root.height / 6)
-        width: Math.round(Math.min(root.width, root.height) / 3 * 2)
-        modal: true
-        focus: true
-        title: "Settings"
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        onAccepted: {
-            //CommandLineGet.getHttpsOutput(urlText.text)
-            //StyleSettings.setStyle(styleBox.currentText)
-            resDialog.close();
-        }
-        onRejected: {
-            settingsDialog.close();
-        }
-
-        contentItem: TextInput {
-            id: urlText
-        }
-
-    }
-
     header: ToolBar {
         RowLayout {
             spacing: 20
@@ -197,15 +172,6 @@ ApplicationWindow {
 
                 Menu {
                     id: optionsMenu
-
-                    Action {
-                        //CommandLineGet.getHttpsOutput()
-
-                        text: "Settings"
-                        onTriggered: {
-                            resDialog.open();
-                        }
-                    }
 
                     Action {
                         text: "Style"
