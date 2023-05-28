@@ -32,7 +32,9 @@ signals:
     void workingSubScribeIndexChanged();
 
 private:
+    void getSettings();
     void saveSubScribingConfig();
+    void saveSettingsConfig();
 
 private:
     QSettings m_settings;

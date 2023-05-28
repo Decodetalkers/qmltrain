@@ -17,6 +17,15 @@ get_config_path()
                   qApp->organizationName().toStdString()));
 }
 
+static QString
+get_settings_path()
+{
+    return QString::fromStdString(
+      std::format("{}/{}/settings.json",
+                  QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).toStdString(),
+                  qApp->organizationName().toStdString()));
+}
+
 StyleSettings::StyleSettings(QObject *parent)
   : QObject(parent)
   , m_settings(QSettings())
@@ -81,6 +90,7 @@ StyleSettings::StyleSettings(QObject *parent)
   , m_workingSubScribeIndex(-1)
   , m_workingSubScribeUrl(QString())
 {
+    getSettings();
     for (auto subs : m_subscribes) {
         connect(
           subs, &SubScribesModel::subscribinfosUpdate, this, &StyleSettings::saveSubScribingConfig);
@@ -148,14 +158,50 @@ StyleSettings::saveSubScribingConfig()
 }
 
 void
+StyleSettings::saveSettingsConfig()
+{
+    QJsonDocument document;
+    document.setObject({
+      {"workingSubScribeUrl", m_workingSubScribeUrl},
+      {"workingSubScribeIndex", m_workingSubScribeIndex},
+    });
+    QByteArray bytes = document.toJson(QJsonDocument::Indented);
+    QFile file(get_settings_path());
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        QTextStream iStream(&file);
+        iStream.setEncoding(QStringConverter::Encoding::Utf8);
+        iStream << bytes;
+        file.close();
+    } else {
+        qWarning() << "Cannot save config";
+    }
+}
+
+void
+StyleSettings::getSettings()
+{
+    QFile file(get_settings_path());
+    if (!file.exists() && !file.isReadable()) {
+        return;
+    }
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    auto bytes                = file.readAll();
+    QJsonDocument document    = QJsonDocument::fromJson(bytes);
+    QJsonObject settingobject = document.object();
+    m_workingSubScribeIndex   = settingobject["workingSubScribeIndex"].toInt();
+    m_workingSubScribeUrl     = settingobject["workingSubScribeUrl"].toString();
+}
+
+void
 StyleSettings::setWorkingSubScribe(QString url, int index, bool toset)
 {
     if (!toset) {
         m_workingSubScribeIndex = -1;
     } else {
         m_workingSubScribeIndex = index;
-        m_workingSubScribeUrl = url;
+        m_workingSubScribeUrl   = url;
     }
+    saveSettingsConfig();
     Q_EMIT workingSubScribeUrlChanged();
     Q_EMIT workingSubScribeIndexChanged();
 }
