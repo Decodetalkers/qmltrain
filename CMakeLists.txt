@@ -10,6 +10,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(Qt6 COMPONENTS Quick Widgets QuickControls2 Network REQUIRED)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror=return-type -fno-omit-frame-pointer -Wextra")
+endif()
 
 qt_add_executable(appmarine
     src/main.cpp
