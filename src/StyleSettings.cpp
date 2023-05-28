@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QQuickStyle>
 #include <QStandardPaths>
+#include <QClipboard>
 #include <format>
 
 static QString
@@ -204,4 +205,10 @@ StyleSettings::setWorkingSubScribe(QString url, int index, bool toset)
     saveSettingsConfig();
     Q_EMIT workingSubScribeUrlChanged();
     Q_EMIT workingSubScribeIndexChanged();
+}
+
+void
+StyleSettings::savetoClipBoard(QString text)
+{
+    QGuiApplication::clipboard()->setText(text);
 }

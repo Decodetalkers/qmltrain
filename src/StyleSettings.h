@@ -24,6 +24,7 @@ public slots:
     void removeSubScribeWithKey(QString subscribe);
     void addSubscribe(QString subscribe, QString subscribeAlias);
     void setWorkingSubScribe(QString url, int index, bool toset);
+    void savetoClipBoard(QString text);
 
 signals:
     void styleChanged();

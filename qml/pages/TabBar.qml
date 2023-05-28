@@ -19,40 +19,8 @@ Page {
                 anchors.fill: parent
                 model: StyleSettings.subscribes
 
-                delegate: ItemDelegate {
+                delegate: OverViewDelegate {
                     width: swipeView.width
-
-                    contentItem: RowLayout {
-                        spacing: 20
-
-                        Label {
-                            text: modelData.urlName
-                            horizontalAlignment: Qt.AlignLeft
-                            Layout.fillWidth: true
-                        }
-
-                        Label {
-                            text: "Last Update : " + modelData.updateTime
-                            horizontalAlignment: Qt.AlignRight
-                            Layout.fillWidth: false
-                        }
-
-                        Label {
-                            text: "Subscribe Counts :" + modelData.subscribeCounts
-                            horizontalAlignment: Qt.AlignRight
-                            Layout.fillWidth: false
-                        }
-
-                        Button {
-                            text: "o"
-                            onClicked: {
-                                modelData.updateSucribes();
-                            }
-                            enabled: !modelData.subscribing
-                        }
-
-                    }
-
                 }
 
             }
