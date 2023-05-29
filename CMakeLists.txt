@@ -33,12 +33,11 @@ qt_add_qml_module(appmarine
     VERSION 1.0
     QML_FILES
         ./qml/Main.qml
-        ./qml/ContactModel.qml
         ./qml/ScrollablePage.qml
         ./qml/pages/LinksPage.qml
-        ./qml/pages/TabBar.qml
-        ./qml/pages/TabBar/SubScribeDelegate.qml
-        ./qml/pages/TabBar/OverViewDelegate.qml
+        ./qml/pages/SubScribePage.qml
+        ./qml/pages/SubScribePage/SubScribeDelegate.qml
+        ./qml/pages/SubScribePage/OverViewDelegate.qml
 )
 
 set_target_properties(appmarine PROPERTIES

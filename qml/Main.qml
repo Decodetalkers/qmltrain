@@ -89,7 +89,7 @@ ApplicationWindow {
 
         anchors.fill: parent
 
-        initialItem: TabBar {
+        initialItem: SubScribePage {
         }
 
     }
