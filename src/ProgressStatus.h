@@ -20,7 +20,7 @@ public:
 
     Q_PROPERTY(ChartValueModel *z READ z NOTIFY valueChanged)
     inline ChartValueModel *z() { return m_z; }
-    
+
 signals:
     void valueChanged();
 

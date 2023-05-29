@@ -46,13 +46,13 @@ signals:
     void valuesChanged();
 
 private:
-    int m_initialValue{0};
+    int m_initialValue{9};
     int m_firstValue{0};
     int m_secondValue{0};
     int m_thirdValue{0};
     int m_forthValue{0};
     int m_fifthValue{0};
-    int m_sixthValue{9};
+    int m_sixthValue{0};
     int m_seventhValue{0};
     int m_eighthValue{0};
     int m_nighthValue{0};
