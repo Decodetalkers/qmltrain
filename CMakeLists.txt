@@ -4,11 +4,12 @@ project(marine VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 COMPONENTS Quick Widgets QuickControls2 Network REQUIRED)
+find_package(Qt6 COMPONENTS Quick Widgets QuickControls2 Network Charts REQUIRED)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror=return-type -fno-omit-frame-pointer -Wextra")
@@ -24,6 +25,12 @@ qt_add_executable(appmarine
     src/Interface.cpp
     src/SubScribesModel.h
     src/SubScribesModel.cpp
+
+    src/ProgressStatus.h
+    src/ProgressStatus.cpp
+    src/ProgressStatus/ChartValueModel.h
+    src/ProgressStatus/ChartValueModel.cpp
+
     misc/pictures.qrc
 )
 
@@ -54,6 +61,7 @@ target_link_libraries(appmarine
     Qt6::Widgets
     Qt6::QuickControls2
     Qt6::Network
+    Qt6::Charts
 )
 
 install(TARGETS appmarine

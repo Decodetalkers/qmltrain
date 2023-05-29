@@ -1,6 +1,8 @@
 #include "Commandline.h"
+#include "ProgressStatus.h"
+#include "ProgressStatus/ChartValueModel.h"
 #include "StyleSettings.h"
-#include "src/SubScribesModel.h"
+#include "SubScribesModel.h"
 
 #include <QApplication>
 #include <QGuiApplication>
@@ -30,7 +32,12 @@ registerGlobalTypes()
       "Command.Base", 1, 0, "StyleSettings", [](QQmlEngine *, QJSEngine *) -> QObject * {
           return new StyleSettings;
       });
+    qmlRegisterSingletonType<ProgressStatus>(
+      "Command.Base", 1, 0, "ProgressStatus", [](QQmlEngine *, QJSEngine *) -> QObject * {
+          return new ProgressStatus;
+      });
     qmlRegisterType<SubScribesModel>("Command.Sync", 1, 0, "SubScribesModel");
+    qmlRegisterType<ChartValueModel>("Command.Sync", 1, 0, "ChartValueModel");
 }
 
 int

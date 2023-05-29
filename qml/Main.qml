@@ -71,7 +71,7 @@ ApplicationWindow {
 
             model: ListModel {
                 ListElement {
-                    title: "MainPage"
+                    title: "ProgressChart"
                     source: "pages/LinksPage.qml"
                 }
 
