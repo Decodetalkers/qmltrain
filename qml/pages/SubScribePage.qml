@@ -22,9 +22,7 @@ Page {
                 delegate: OverViewDelegate {
                     width: swipeView.width
                 }
-
             }
-
         }
 
         Repeater {
@@ -40,17 +38,17 @@ Page {
                 }
 
                 ListView {
+                    id: view
                     anchors.fill: parent
                     model: modelData
 
                     delegate: SubScribeDelegate {
                         width: swipeView.width
-                        theswitch.checked: modelData.url === StyleSettings.workingSubScribeUrl && index === StyleSettings.workingSubScribeIndex
-                        onSwitchCheck: function(checked) {
-                            StyleSettings.setWorkingSubScribe(modelData.url, index, checked);
+                        theswitch.checked: model.url === StyleSettings.workingSubScribeUrl && index === StyleSettings.workingSubScribeIndex
+                        onSwitchCheck: function (checked) {
+                            StyleSettings.setWorkingSubScribe(model.url, index, checked);
                         }
                     }
-
                 }
 
                 RoundButton {
@@ -65,11 +63,8 @@ Page {
                     }
                     enabled: !modelData.subscribing
                 }
-
             }
-
         }
-
     }
 
     RoundButton {
@@ -162,9 +157,7 @@ Page {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBaseline
                 placeholderText: grid.url
             }
-
         }
-
     }
 
     header: TabBar {
@@ -195,13 +188,8 @@ Page {
                             rmdialog.removeUrl(modelData.url, modelData.urlName);
                         }
                     }
-
                 }
-
             }
-
         }
-
     }
-
 }
